@@ -33,7 +33,7 @@ class TVaR(RiskMeasure):
         # Hypothèse de fréquence constante
         frequency = self.estimate_avg_frequency(claims)
         alpha, theta = self.estimate_gamma_parameters(claims)
-        tvar = self.estimate_gamma_tvar(kappa, frequency * alpha, theta)
+        tvar = self.estimate_gamma_tvar(self.kappa, frequency * alpha, theta)
         return tvar * frequency
 
     def compute_poisson_gamma(self, claims, _, tol=1e-6): # E. Marceau, Modelisation et evaluation quantitative des risques en actuariat, p. 86
