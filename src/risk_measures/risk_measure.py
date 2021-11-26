@@ -1,25 +1,52 @@
 import numpy as np
+from scipy.stats import poisson, gamma
 
 
 class RiskMeasure:
-    def __init__(self, capital, prior=None):
-        self.capital = capital
+    def __init__(self, prior=None):
         self.prior = prior
-    def compute(self):
-        if prior==None
 
-# alpha = 1
-# theta = 1
-# _lambda = 1
-# kappa = 0.95
-# M = 100000
-# claims = list()
-# for i in range(M):
-#     claim_list = list()
-#     n_claims = 1#poisson.rvs(_lambda)
-#     if n_claims > 0:
-#         claim_list.append([gamma.rvs(n_claims*alpha, scale=theta)])
-#     claims.append(claim_list)
+    def compute(self, claims, capital=0):
+        if self.prior is None:
+            return self.compute_no_prior(claims, capital)
+        elif self.prior == "poisson":
+            return self.compute_poisson(claims, capital)
+        elif self.prior == "gamma":
+            return self.compute_gamma(claims, capital)
+        elif self.prior == "poisson-gamma":
+            return self.compute_poisson_gamma(claims, capital)
 
-# VaR(kappa, claims)
-# TVaR(kappa, claims)
+    def compute_no_prior(self, claims):
+        pass
+
+    def compute_poisson(self, claims):
+        pass
+
+    def compute_gamma(self, claims):
+        pass
+
+    def compute_poisson_gamma(self, claims):
+        pass
+
+    def estimate_poisson_parameters(self, claims):
+        n_claims = [len(c) for c in claims]
+        _lambda = np.mean(n_claims)
+        return _lambda
+
+    def estimate_gamma_parameters(self, claims):
+        severities = [c for claim_list in claims for c in claim_list]
+        avg_severity = np.mean(severities)
+        variance_severity = np.var(severities)
+        theta = variance_severity / avg_severity
+        alpha = avg_severity / theta
+        return alpha, theta
+
+    def estimate_avg_frequency(self, claims):
+        n_claims = [len(c) for c in claims]
+        frequency = np.mean(n_claims)
+        return frequency
+
+    def estimate_avg_severity(self, claims):
+        severities = [c for claim_list in claims for c in claim_list]
+        avg_severity = np.mean(severities)
+        return avg_severity
