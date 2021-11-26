@@ -17,7 +17,8 @@ T = 100
 if __name__ == "__main__":
     np.random.seed(2021)
     insureds = [Insured(freq=Bernoulli(p), sev=Constant(s), premium=prem) for p, s, prem in zip(p_list, s_list, prem_list)]
-    insurer = EGreedy(epsilon, K=len(prem_list), capital=capital)
-    env = Environment(insureds, T)
+    insurer = EGreedy(epsilon=epsilon, K=len(prem_list), capital=capital)
+    env = Environment(insureds=insureds, T=T)
 
+    print(insurer.name)
     env.simul_plays(5, [insurer])

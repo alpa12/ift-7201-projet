@@ -1,5 +1,6 @@
 import numpy as np
 from matplotlib import pyplot
+from datetime import datetime
 
 
 
@@ -34,20 +35,18 @@ class Environment():
                 capital_cumul.append(self.play(insurer))
             capital_mean_matrix.append(np.mean(capital_cumul, axis=0))
             capital_low_list = []
-            capital_high_list = []
+            capital_high_list = [] # TODO Clean ca
             for t in range(len(capital_cumul[0])):
                 tth_values = [capital_cumul[i][t] for i in range(len(capital_cumul))]
-                print(tth_values)
-                print(a)
+                # print(tth_values)
+                # print(a)
                 capital_low_list.append(self._compute_var(tth_values, alpha=a))
                 capital_high_list.append(self._compute_var(tth_values, alpha=b))
 
             capital_low_matrix.append(capital_low_list)
             capital_high_matrix.append(capital_high_list)
 
-            print(self._compute_var([1,2,3,4,5,6,7,8,9,10], 0.3))
-
-        self.plot_capital(["abc"], capital_mean_matrix, capital_low_matrix, capital_high_matrix)
+        self.plot_capital([i.name for i in insurers], capital_mean_matrix, capital_low_matrix, capital_high_matrix)
 
     def _compute_var(self, x, alpha):
         idx = int(len(x) * alpha) - 1
@@ -56,9 +55,13 @@ class Environment():
             
 
 
-    def plot_capital(self, insurer_name_list, capital_mean_matrix, capital_low_matrix, capital_high_matrix):
+    def plot_capital(self, insurer_name_list, capital_mean_matrix, capital_low_matrix, capital_high_matrix, filename=datetime.now().strftime("%d_%H:%M:%S")):
+        print(insurer_name_list)
         for insurer_name, mean, low, high in zip(insurer_name_list, capital_mean_matrix, capital_low_matrix, capital_high_matrix):
             pyplot.plot(mean, label=insurer_name)
             pyplot.fill_between(np.arange(len(mean)), low, high, alpha=0.4)
+        pyplot.title("Capital de l'assureur en fonction du temps")
+        pyplot.xlabel("Pas de temps")
+        pyplot.ylabel("Capital ($)")
         pyplot.legend()
-        pyplot.savefig("outputs/test_output")
+        pyplot.savefig(f"outputs/{filename}") # TODO: Ajouter titre et nom d'assureur
