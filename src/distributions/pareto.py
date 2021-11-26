@@ -5,7 +5,7 @@ from distributions.distribution import Distribution
 class Pareto(Distribution):
     def __init__(self, alpha, _lambda):
         # If alpha <= 1 the mean doesn't exist
-        assert alpha > 1 and _lambda > 0
+        assert alpha > 1 and _lambda > 0, f"alpha > 1 and _lambda > 0, gave alpha={alpha}, _lambda={_lambda}"
         self.alpha = alpha
         self._lambda = _lambda
 

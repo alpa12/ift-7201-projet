@@ -101,24 +101,3 @@ def estimate_avg_severity(claims):
     avg_severity = np.mean(severities)
     return avg_severity
 
-claims = [[], [1,2,3], [4,2], [], [1,6], [8], [], [2], [1, 5], [], [5]]
-TVaR(0.9, claims, prior=None)
-TVaR(0.9, claims, prior="poisson")
-TVaR(0.9, claims, prior="gamma")
-TVaR(0.9, claims, prior="poisson-gamma")
-
-alpha = 1
-theta = 1
-_lambda = 1
-kappa = 0.95
-M = 1000000
-claims = list()
-for i in range(M):
-    claim_list = list()
-    n_claims = poisson.rvs(_lambda)
-    for j in range(n_claims):
-        claim_list.append(gamma.rvs(alpha, scale=theta))
-    claims.append(claim_list)
-VaR(kappa, claims)
-TVaR(kappa, claims)
-
