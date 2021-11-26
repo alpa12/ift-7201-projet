@@ -1,10 +1,8 @@
 import numpy as np
 from environment import Environment
-from insurers.e_greedy import EGreedy
-from insurers.insurer import Insurer
+from insurers import EGreedy
 from insured import Insured
-from distributions.bernoulli import Bernoulli
-from distributions.constant import Constant
+from distributions import Bernoulli, Constant
 
 
 p_list = [0.8, 0.2]
