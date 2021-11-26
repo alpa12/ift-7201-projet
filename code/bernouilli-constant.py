@@ -20,6 +20,6 @@ if __name__ == "__main__":
     np.random.seed(2021)
     insureds = [Insured(freq=Bernoulli(p), sev=Constant(s), premium=1) for p, s, prem in zip(p_list, s_list, prem_list)]
     insurer = EGreedy(epsilon, K=len(p_list), capital=capital)
-    env = Environment(insureds, insurer, T)
+    env = Environment(insureds, T)
 
-    env.play()
+    env.play(insurer)
