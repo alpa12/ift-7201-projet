@@ -6,6 +6,9 @@ from insurers.insurer import Insurer
 class EGreedy(Insurer):
     def __init__(self, epsilon, K, name=None, capital=0, interest_rate=0):
         super().__init__(K=K, name=name, capital=capital, interest_rate=interest_rate)
+        if name is None:
+            # Overwrite name to add epsilon parameter
+            self.name = f"{self.__class__.__name__} $\epsilon = ${epsilon}"
         self.epsilon = epsilon
 
     def get_action(self):

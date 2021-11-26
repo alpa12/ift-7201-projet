@@ -1,5 +1,4 @@
 import numpy as np
-from distributions.distribution import Distribution
 
 
 class Insured():
@@ -13,8 +12,6 @@ class Insured():
         functions, which when they are called with argument n,
         simulate n numbers.
         """
-        for x in [freq, sev]:
-            assert isinstance(x, Distribution)
 
         self.frequency = freq
         self.severity = sev

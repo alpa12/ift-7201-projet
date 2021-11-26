@@ -4,7 +4,6 @@ from datetime import datetime
 from tqdm import tqdm
 
 
-
 class Environment():
     def __init__(self, insureds, T):
         self.insureds = insureds
