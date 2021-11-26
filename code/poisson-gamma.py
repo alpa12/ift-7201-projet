@@ -2,22 +2,24 @@ import numpy as np
 from environment import Environment
 from insurers import EGreedy
 from insured import Insured
-from distributions import Bernoulli, Constant
+from distributions import Poisson, Gamma
 
 
-p_list = [0.8, 0.2]
-s_list = [3, 4]
-prem_list = [1.1, 0.9]
+lambda_list = [0.005, 0.05, 0.03]
+alpha_list = [3, 1, 2]
+theta_list = [55000, 7500, 6000]
+prem_list = [600, 400, 400]
 
 epsilon = 0.1
-capital = 5
+capital = 300000
 
-T = 100
+T = 10000
 
 if __name__ == "__main__":
     np.random.seed(2021)
-    insureds = [Insured(freq=Bernoulli(p), sev=Constant(s), premium=1) for p, s, prem in zip(p_list, s_list, prem_list)]
-    insurer = EGreedy(epsilon, K=len(p_list), capital=capital)
+    insureds = [Insured(freq=Poisson(_lambda), sev=Gamma(alpha, theta), premium=prem) \
+        for _lambda, alpha, theta, prem in zip(lambda_list, alpha_list, theta_list, prem_list)]
+    insurer = EGreedy(epsilon, K=len(prem_list), capital=capital)
     env = Environment(insureds, insurer, T)
 
     env.play()

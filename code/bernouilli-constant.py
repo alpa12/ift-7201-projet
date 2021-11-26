@@ -1,15 +1,13 @@
 import numpy as np
 from environment import Environment
-from insurers.e_greedy import EGreedy
-from insurers.insurer import Insurer
+from insurers import EGreedy
 from insured import Insured
-from distributions.bernoulli import Bernoulli
-from distributions.constant import Constant
+from distributions import Bernoulli, Constant
 
 
 p_list = [0.8, 0.2]
 s_list = [3, 4]
-prem_list = [1.1, 0.9]
+prem_list = [3, 3]
 
 epsilon = 0.1
 capital = 5
@@ -18,8 +16,8 @@ T = 100
 
 if __name__ == "__main__":
     np.random.seed(2021)
-    insureds = [Insured(freq=Bernoulli(p), sev=Constant(s), premium=1) for p, s, prem in zip(p_list, s_list, prem_list)]
-    insurer = EGreedy(epsilon, K=len(p_list), capital=capital)
+    insureds = [Insured(freq=Bernoulli(p), sev=Constant(s), premium=prem) for p, s, prem in zip(p_list, s_list, prem_list)]
+    insurer = EGreedy(epsilon, K=len(prem_list), capital=capital)
     env = Environment(insureds, insurer, T)
 
     env.play()
