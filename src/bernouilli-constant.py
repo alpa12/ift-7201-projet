@@ -20,4 +20,4 @@ if __name__ == "__main__":
     insurer = EGreedy(epsilon, K=len(prem_list), capital=capital)
     env = Environment(insureds, T)
 
-    env.play(insurer)
+    env.simul_plays(5, [insurer])
