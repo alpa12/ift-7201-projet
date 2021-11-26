@@ -14,8 +14,8 @@ class EGreedy(Insurer):
         else:
             return np.argmax(self.means)
 
-    def store_claims(self, k, claims):
-        claims = np.sum(claims)
-        self.means[k] = (self.plays[k] * self.means[k] + claims)/(self.plays[k] + 1)
+    def report_results(self, k, premium, claims):
+        profit = premium - np.sum(claims)
+        self.means[k] = (self.plays[k] * self.means[k] + profit) / (self.plays[k] + 1)
         self.plays[k] += 1
-        super().store_claims(k, claims)
+        super().report_results(k, premium, claims)

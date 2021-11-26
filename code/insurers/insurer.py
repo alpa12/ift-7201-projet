@@ -12,5 +12,9 @@ class Insurer():
     def get_action(self):
         return np.random.choice(self.K)
 
-    def store_claims(self, k, claims):
+    def report_results(self, k, premium, claims):
         self.claims[k].append(claims)
+        self.capital += premium - np.sum(claims)
+
+    def is_ruined(self):
+        return self.capital < 0
