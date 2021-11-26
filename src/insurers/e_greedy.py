@@ -19,3 +19,13 @@ class EGreedy(Insurer):
         self.means[k] = (self.plays[k] * self.means[k] + profit) / (self.plays[k] + 1)
         self.plays[k] += 1
         super().report_results(k, premium, claims)
+
+    def reset(self):
+        self.__init__(
+            epsilon=self.epsilon,
+            K=self.K,
+            name=self.name,
+            capital=self.initial_capital,
+            interest_rate=self.interest_rate
+        )
+
