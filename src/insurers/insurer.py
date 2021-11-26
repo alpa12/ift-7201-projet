@@ -2,8 +2,13 @@ import numpy as np
 
 
 class Insurer():
-    def __init__(self, K, capital=0, interest_rate=0):
+    def __init__(self, K, name=None, capital=0, interest_rate=0):
         self.K = K
+        if name is None:
+            self.name = self.__class__.__name__
+        else:
+            self.name = name
+        self.initial_capital = capital
         self.capital = capital
         self.interest_rate = interest_rate
         self.means = np.zeros(K)
@@ -20,3 +25,11 @@ class Insurer():
 
     def is_ruined(self):
         return self.capital < 0
+
+    def reset(self):
+        self.__init__(
+            K=self.K,
+            name=self.name,
+            capital=self.initial_capital,
+            interest_rate=self.interest_rate
+        )
