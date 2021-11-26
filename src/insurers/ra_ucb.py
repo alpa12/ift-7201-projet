@@ -24,7 +24,7 @@ class RA_UCB(Insurer):
         self.means[k] = (self.plays[k] * self.means[k] + profit) / (self.plays[k] + 1)
         self.plays[k] += 1
         super().report_results(k, premium, claims)
-        self.risk_quantity_list[k] = self.risk_measure(self.claims[k], prior=self.prior) # TODO correct this
+        self.risk_quantity_list[k] = self.risk_measure.compute(self.claims[k])
 
 
     def reset(self):
