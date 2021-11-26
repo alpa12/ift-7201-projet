@@ -10,4 +10,5 @@ class Poisson(Distribution):
         return self._lambda
 
     def play(self, n):
-        return np.random.poisson(self._lambda, n)
+        freq = np.random.poisson(self._lambda, n)
+        return freq

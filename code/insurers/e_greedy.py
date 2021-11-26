@@ -4,8 +4,8 @@ import numpy as np
 from insurers.insurer import Insurer
 
 class EGreedy(Insurer):
-    def __init__(self, epsilon, K, capital=0):
-        super().__init__(K, capital)
+    def __init__(self, epsilon, K, capital=0, interest_rate=0):
+        super().__init__(K, capital, interest_rate)
         self.epsilon = epsilon
 
     def get_action(self):
@@ -15,6 +15,7 @@ class EGreedy(Insurer):
             return np.argmax(self.means)
 
     def report_results(self, k, premium, claims):
+        print("claims", claims)
         profit = premium - np.sum(claims)
         self.means[k] = (self.plays[k] * self.means[k] + profit) / (self.plays[k] + 1)
         self.plays[k] += 1

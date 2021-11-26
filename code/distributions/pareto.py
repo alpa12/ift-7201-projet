@@ -13,4 +13,4 @@ class Pareto(Distribution):
         return self._lambda / (self.alpha - 1)
 
     def play(self, n):
-        return self._lambda * ((1 - np.random.uniform(n)) ** (-1 / self.alpha) - 1)
+        return self._lambda * ((1 - np.random.uniform(size=n)) ** (-1 / self.alpha) - 1)

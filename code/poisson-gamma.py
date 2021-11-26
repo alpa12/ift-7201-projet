@@ -19,7 +19,7 @@ if __name__ == "__main__":
     np.random.seed(2022)
     insureds = [Insured(freq=Poisson(_lambda), sev=Gamma(alpha, theta), premium=prem) \
         for _lambda, alpha, theta, prem in zip(lambda_list, alpha_list, theta_list, prem_list)]
-    insurer = EGreedy(epsilon, K=len(prem_list), capital=capital)
+    insurer = EGreedy(epsilon, len(prem_list), capital)
     env = Environment(insureds, T)
 
     env.play(insurer)

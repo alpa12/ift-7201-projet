@@ -1,4 +1,6 @@
+import numpy as np
 from distributions.distribution import Distribution
+
 
 class Insured():
     """
@@ -20,4 +22,5 @@ class Insured():
 
     def play(self):
         n_claims = self.frequency.play(1)
-        return (self.premium, self.severity.play(n_claims))
+        claims = np.array([]) if n_claims == 0 else self.severity.play(n_claims)
+        return (self.premium, claims)
