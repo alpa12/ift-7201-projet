@@ -1,12 +1,17 @@
 import numpy as np
+from bisect import bisect_left
 from scipy.stats import poisson, gamma
 from risk_measures.risk_measure import RiskMeasure
 
 
 class ProbabilityOfRuin(RiskMeasure):
-    def compute_no_prior(self, parameters, capital):
-        ruins = [1 if np.sum(c) > capital else 0 for c in claims]
-        return np.mean(ruins)
+    def compute_no_prior(self, sorted_claims, capital):
+        if sorted_claims[-1] < capital:
+            prob = 0
+        else:
+            index = bisect_left(sorted_claims, capital)
+            prob = (len(sorted_claims) - index) / len(sorted_claims)
+        return prob
 
     def compute_poisson(self, _lambda, capital):
         # Hypothèse de sévérité constante de 1

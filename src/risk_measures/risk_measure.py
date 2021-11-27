@@ -73,7 +73,8 @@ class RiskMeasure:
         for severity in severities:
             w.add(np.array([severity]))
 
-        theta = w.var_s[0] / w.mean[0]
+        variance = w.mean[0] if w.var_s[0] is None else w.var_s[0]
+        theta = variance / w.mean[0]
         alpha = w.mean[0] / theta
         return alpha, theta, w
 
