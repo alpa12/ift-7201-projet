@@ -8,16 +8,12 @@ class TVaR(RiskMeasure):
         super().__init__(prior)
         self.kappa = kappa
 
-    def compute_no_prior(self, claims, _):
-        totals = [np.sum(c) for c in claims]
-        totals.sort()
-        index = int(np.ceil(len(claims) * self.kappa) - 1)
-        return np.mean(totals[index:])
+    def compute_no_prior(self, sorted_claims, _):
+        index = int(np.ceil(len(sorted_claims) * self.kappa) - 1)
+        return np.mean(sorted_claims[index:])
 
-    def compute_poisson(self, claims, _):
-        # Hypothèse de sévérité constante
-        severity = self.estimate_avg_severity(claims)
-        _lambda = self.estimate_poisson_parameters(claims)
+    def compute_poisson(self, _lambda, _):
+        # Hypothèse de sévérité constante de 1
         var = poisson.ppf(self.kappa, _lambda)
         E_x_LE_VaR = 0
         val = 1
@@ -27,16 +23,14 @@ class TVaR(RiskMeasure):
         E_x = _lambda
         E_x_GE_VaR = E_x - E_x_LE_VaR
         tvar = (E_x_GE_VaR + var * (poisson.cdf(var, _lambda) - self.kappa)) / (1 - self.kappa)
-        return tvar * severity
+        return tvar
 
-    def compute_gamma(self, claims, _):
-        # Hypothèse de fréquence constante
-        frequency = self.estimate_avg_frequency(claims)
-        alpha, theta = self.estimate_gamma_parameters(claims)
-        tvar = self.estimate_gamma_tvar(self.kappa, frequency * alpha, theta)
-        return tvar * frequency
+    def compute_gamma(self, alpha, theta, _):
+        # Hypothèse de fréquence constante de 1
+        tvar = self.estimate_gamma_tvar(self.kappa, alpha, theta)
+        return tvar
 
-    def compute_poisson_gamma(self, claims, _, tol=1e-6): # E. Marceau, Modelisation et evaluation quantitative des risques en actuariat, p. 86
+    def compute_poisson_gamma(self, _lambda, alpha, theta, _, tol=1e-6): # E. Marceau, Modelisation et evaluation quantitative des risques en actuariat, p. 86
         raise NotImplemented
         # _lambda = estimate_poisson_parameters(claims)
         # alpha, theta = estimate_gamma_parameters(claims)

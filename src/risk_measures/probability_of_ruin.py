@@ -4,28 +4,21 @@ from risk_measure import RiskMeasure
 
 
 class ProbabilityOfRuin(RiskMeasure):
-    def compute_no_prior(self, claims, capital):
+    def compute_no_prior(self, parameters, capital):
         ruins = [1 if np.sum(c) > capital else 0 for c in claims]
         return np.mean(ruins)
 
-    def compute_poisson(self, claims, capital):
-        # Hypothèse de sévérité constante
-        severity = self.estimate_avg_severity(claims)
-        _lambda = self.estimate_poisson_parameters(claims)
-        critical_n_claim = np.ceil(capital / severity)
-        prob = poisson.sf(critical_n_claim, _lambda)
+    def compute_poisson(self, _lambda, capital):
+        # Hypothèse de sévérité constante de 1
+        prob = poisson.sf(capital, _lambda)
         return prob
 
-    def compute_gamma(self, claims, capital):
-        # Hypothèse de fréquence constante
-        frequency = self.estimate_avg_frequency(claims)
-        alpha, theta = self.estimate_gamma_parameters(claims)
-        prob = gamma.sf(capital, frequency * alpha, scale=theta)
+    def compute_gamma(self, alpha, theta, capital):
+        # Hypothèse de fréquence constante de 1
+        prob = gamma.sf(capital, alpha, scale=theta)
         return prob
 
-    def compute_poisson_gamma(self, claims, capital, tol=1e-6):
-        _lambda = self.estimate_poisson_parameters(claims)
-        alpha, theta = self.estimate_gamma_parameters(claims)
+    def compute_poisson_gamma(self, _lambda, alpha, theta, capital, tol=1e-6):
         prob = 0
         prob_increment = 1
         val = 1

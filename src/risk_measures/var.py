@@ -8,24 +8,19 @@ class VaR(RiskMeasure):
         super().__init__(prior)
         self.kappa = kappa
 
-    def compute_no_prior(self, claims, _):
-        totals = [np.sum(c) for c in claims]
-        index = int(np.ceil(len(claims) * self.kappa) - 1)
-        return np.partition(totals, index)[index]
+    def compute_no_prior(self, sorted_claims, _):
+        index = int(np.ceil(len(sorted_claims) * self.kappa) - 1)
+        return sorted_claims[index]
     
-    def compute_poisson(self, claims, _):
-        # Hypothèse de sévérité constante
-        severity = self.estimate_avg_severity(claims)
-        _lambda = self.estimate_poisson_parameters(claims)
-        return poisson.ppf(self.kappa, _lambda) * severity
+    def compute_poisson(self, _lambda, _):
+        # Hypothèse de sévérité constante de 1
+        return poisson.ppf(self.kappa, _lambda)
 
-    def compute_gamma(self, claims, _):
-        # Hypothèse de fréquence constante
-        frequency = self.estimate_avg_frequency(claims)
-        alpha, theta = self.estimate_gamma_parameters(claims)
-        return gamma.ppf(self.kappa, frequency * alpha, scale=theta)
+    def compute_gamma(self, alpha, theta, _):
+        # Hypothèse de fréquence constante de 1
+        return gamma.ppf(self.kappa, alpha, scale=theta)
 
-    def compute_poisson_gamma(self, claims, _, tol=1e-6):
+    def compute_poisson_gamma(self, _lambda, alpha, theta, _, tol=1e-6):
         raise NotImplemented
         # _lambda = estimate_poisson_parameters(claims)
         # alpha, theta = estimate_gamma_parameters(claims)
