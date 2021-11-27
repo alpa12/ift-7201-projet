@@ -23,11 +23,10 @@ class Insurer():
         return self.capital < 0
 
     def reset(self):
-        self.__init__(
-            K=self.K,
-            capital=self.initial_capital,
-            interest_rate=self.interest_rate
-        )
+        self.means = np.zeros(self.K)
+        self.plays = np.zeros(self.K)
+        self.claims = [[] for k in range(self.K)]
+        self.capital = self.initial_capital
 
     def __str__(self):
         return "Random"

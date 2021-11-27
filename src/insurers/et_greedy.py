@@ -23,11 +23,8 @@ class ETGreedy(Insurer):
         super().report_results(k, premium, claims)
 
     def reset(self):
-        self.__init__(
-            K=self.K,
-            capital=self.initial_capital,
-            interest_rate=self.interest_rate
-        )
+        super().reset()
+        self.t = 0
 
     def __str__(self):
         return "ET-Greedy"

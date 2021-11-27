@@ -17,13 +17,5 @@ class AlwaysTheSame(Insurer):
         self.plays[k] += 1
         super().report_results(k, premium, claims)
 
-    def reset(self):
-        self.__init__(
-            k=self.k,
-            K=self.K,
-            capital=self.initial_capital,
-            interest_rate=self.interest_rate
-        )
-
     def __str__(self):
         return f"Always k={self.k}"
