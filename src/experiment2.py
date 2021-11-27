@@ -15,9 +15,9 @@ from risk_measures import VaR, TVaR, PoR
 
 filename = "experiment2"
 
-prem_list = [100, 100]
+prem_list = [100, 105]
 prior = "gamma"
-mu_list = [95, 90]
+mu_list = [100, 100]
 var_list = [1000, 100000]
 
 theta_list = [var/mu for mu, var in zip(mu_list, var_list)]
@@ -27,7 +27,7 @@ epsilon = 0.05
 capital = 500
 
 T = 200
-M = 100
+M = 1000
 
 K = len(prem_list)
 
@@ -40,9 +40,9 @@ if __name__ == "__main__":
     insurers.append(AlwaysTheSame(k=0, K=K, capital=capital)) # Always chooses the less risky insured
     insurers.append(AlwaysTheSame(k=1, K=K, capital=capital)) # Always chooses the riskier insured
     insurers.append(Insurer(K=K, capital=capital)) # Chooses insured randomly
-    insurers.append(RiskAware(A=1, K=K, risk_measure=VaR(kappa=0.95, prior=prior), capital=capital))
-    insurers.append(RiskAware(A=1, K=K, risk_measure=TVaR(kappa=0.95, prior=prior), capital=capital))
-    insurers.append(RiskAware(A=1, K=K, risk_measure=PoR(prior=prior), capital=capital))
+    insurers.append(RiskAware(A=1e2, K=K, risk_measure=VaR(kappa=0.95, prior=prior), capital=capital))
+    insurers.append(RiskAware(A=1e2, K=K, risk_measure=TVaR(kappa=0.95, prior=prior), capital=capital))
+    insurers.append(RiskAware(A=1e4, K=K, risk_measure=PoR(prior=prior), capital=capital))
     insurers.append(UCB(K=K, capital=capital))
     env = Environment(insureds=insureds, T=T)
 
