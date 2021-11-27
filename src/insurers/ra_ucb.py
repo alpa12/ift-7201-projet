@@ -2,10 +2,10 @@
 
 import numpy as np
 from insurers.insurer import Insurer
-from utils.risk_measures import TVaR
+from risk_measures.tvar import TVaR
 
 class RA_UCB(Insurer):
-    def __init__(self, risk_aversion, K, risk_measure=TVaR, name=None, capital=0, interest_rate=0):
+    def __init__(self, risk_aversion, K, risk_measure=TVaR(0.95), name=None, capital=0, interest_rate=0):
         super().__init__(K=K, name=name, capital=capital, interest_rate=interest_rate)
         if name is None:
             # Overwrite name to add risk_aversion parameter
@@ -24,14 +24,14 @@ class RA_UCB(Insurer):
         self.means[k] = (self.plays[k] * self.means[k] + profit) / (self.plays[k] + 1)
         self.plays[k] += 1
         super().report_results(k, premium, claims)
-        self.risk_quantity_list[k] = self.risk_measure.compute(self.claims[k])
+        self.risk_quantity_list[k] = self.risk_measure.compute(claims=self.claims[k], capital=self.capital)
 
 
     def reset(self):
         self.__init__(
             risk_aversion=self.risk_aversion,
             K=self.K,
-            prior=self.prior,
+            risk_measure=TVaR(0.95),
             name=self.name,
             capital=self.initial_capital,
             interest_rate=self.interest_rate
