@@ -27,7 +27,8 @@ alpha_list = [mu/theta for theta, mu in zip(theta_list, mu_list)]
 epsilon = 0.05
 capital = 500
 
-T = 200
+T = 5
+M = 5
 
 K = len(prem_list)
 
@@ -40,4 +41,4 @@ if __name__ == "__main__":
     insurer4 = RiskAware(kappa=0.90, K=K, capital=capital)
     env = Environment(insureds=insureds, T=T)
 
-    env.simul_plays(100, [insurer1, insurer2, insurer3, insurer4], a = 0.33, b = 0.67, filename=filename)
+    env.simul_plays(M, [insurer1, insurer2, insurer3, insurer4], a = 0.33, b = 0.67, filename=filename)

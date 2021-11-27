@@ -34,3 +34,6 @@ class ProbabilityOfRuin(RiskMeasure):
             prob += prob_increment
             val += 1
         return prob + tol
+
+    def __str__(self):
+        return "Probability of Ruin"

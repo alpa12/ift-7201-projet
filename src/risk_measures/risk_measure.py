@@ -40,8 +40,9 @@ class RiskMeasure:
 
     def estimate_no_prior_parameters(self, claims, old_parameters=None):
         if old_parameters is None:
-            totals = [np.sum(c) for c in claims]
-            totals.sort()
+            sorted_claims = [np.sum(c) for c in claims]
+            sorted_claims.sort()
+            parameters = sorted_claims
         else:
             sorted_claims = old_parameters
             new_claim = np.sum(claims[-1])

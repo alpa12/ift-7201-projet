@@ -38,3 +38,6 @@ class VaR(RiskMeasure):
         #     cum_poisson += prob_poisson
         # var += (1 - cum_poisson) * gamma.ppf(adj_kappa, val * alpha, scale=theta)
         # return var * (1 + TOL)
+
+    def __str__(self):
+        return "VaR"

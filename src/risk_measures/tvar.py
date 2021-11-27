@@ -49,3 +49,6 @@ class TVaR(RiskMeasure):
         var = gamma.ppf(self.kappa, alpha, scale=theta)
         tvar = (1 / (1 - self.kappa)) * alpha * theta * gamma.sf(var, alpha + 1, scale=theta)
         return tvar
+
+    def __str__(self):
+        return "TVaR"

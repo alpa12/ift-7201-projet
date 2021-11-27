@@ -25,7 +25,8 @@ alpha_list = [mu/theta for theta, mu in zip(theta_list, mu_list)]
 epsilon = 0.05
 capital = 500
 
-T = 500
+T = 200
+M = 100
 
 K = len(prem_list)
 
@@ -43,4 +44,4 @@ if __name__ == "__main__":
     insurers.append(UCB(K=K, capital=capital))
     env = Environment(insureds=insureds, T=T)
 
-    env.simul_plays(5, insurers, a = 0.33, b = 0.67, filename=filename)
+    env.simul_plays(M, insurers, a = 0.33, b = 0.67, filename=filename)
