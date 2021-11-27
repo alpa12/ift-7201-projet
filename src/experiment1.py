@@ -39,8 +39,8 @@ if __name__ == "__main__":
     insurers.append(AlwaysTheSame(k=0, K=K, capital=capital)) # Always chooses the less risky insured
     insurers.append(AlwaysTheSame(k=1, K=K, capital=capital)) # Always chooses the riskier insured
     insurers.append(RiskAware(A=10, K=K, risk_measure=TVaR(kappa=0.95, prior="gamma"), capital=capital))
-    insurers.append(RiskAware(A=0, K=K, risk_measure=TVaR(kappa=0.95, prior="gamma"), capital=capital))
-    insurers.append(RiskAware(A=0, K=K, risk_measure=ProbabilityOfRuin(prior="gamma"), capital=capital))
+    insurers.append(RiskAware(A=10, K=K, risk_measure=TVaR(kappa=0.95, prior="gamma"), capital=capital))
+    insurers.append(RiskAware(A=10, K=K, risk_measure=ProbabilityOfRuin(prior="gamma"), capital=capital))
     insurers.append(UCB(K=K, capital=capital))
     env = Environment(insureds=insureds, T=T)
 
