@@ -4,11 +4,8 @@ import numpy as np
 from insurers.insurer import Insurer
 
 class EGreedy(Insurer):
-    def __init__(self, epsilon, K, name=None, capital=0, interest_rate=0):
-        super().__init__(K=K, name=name, capital=capital, interest_rate=interest_rate)
-        if name is None:
-            # Overwrite name to add epsilon parameter
-            self.name = f"{self.__class__.__name__} $\epsilon = ${epsilon}"
+    def __init__(self, epsilon, K, capital=0, interest_rate=0):
+        super().__init__(K=K, capital=capital, interest_rate=interest_rate)
         self.epsilon = epsilon
 
     def get_action(self):
@@ -27,8 +24,9 @@ class EGreedy(Insurer):
         self.__init__(
             epsilon=self.epsilon,
             K=self.K,
-            name=self.name,
             capital=self.initial_capital,
             interest_rate=self.interest_rate
         )
 
+    def __str__(self):
+        return f"E-Greedy{self.epsilon}"

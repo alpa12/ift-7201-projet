@@ -5,11 +5,8 @@ from insurers.insurer import Insurer
 from risk_measures.tvar import TVaR
 
 class RiskAware(Insurer):
-    def __init__(self, A, K, risk_measure=TVaR(0.95), name=None, capital=0, interest_rate=0):
-        super().__init__(K=K, name=name, capital=capital, interest_rate=interest_rate)
-        if name is None:
-            # Overwrite name to add A parameter
-            self.name = f"{self.__class__.__name__}{A} {risk_measure}"
+    def __init__(self, A, K, risk_measure=TVaR(0.95), capital=0, interest_rate=0):
+        super().__init__(K=K, capital=capital, interest_rate=interest_rate)
         self.A = A
         self.risk_quantity_list = np.zeros(K)
         self.parameters = [None] * K
@@ -33,7 +30,9 @@ class RiskAware(Insurer):
             A=self.A,
             K=self.K,
             risk_measure=TVaR(0.95),
-            name=self.name,
             capital=self.initial_capital,
             interest_rate=self.interest_rate
         )
+
+    def __str__(self):
+        return f"RiskAware{self.A} {self.risk_measure}"

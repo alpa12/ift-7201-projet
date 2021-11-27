@@ -79,6 +79,9 @@ class RiskMeasure:
         alpha = w.mean[0] / theta
         return alpha, theta, w
 
+    def __str__(self):
+        return "RiskMeasure"
+
     def compute_no_prior(self, claims):
         pass
 

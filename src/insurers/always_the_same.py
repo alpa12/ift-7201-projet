@@ -4,11 +4,8 @@ import numpy as np
 from insurers.insurer import Insurer
 
 class AlwaysTheSame(Insurer):
-    def __init__(self, k, K, name=None, capital=0, interest_rate=0):
-        super().__init__(K=K, name=name, capital=capital, interest_rate=interest_rate)
-        if name is None:
-            # Overwrite name to add k parameter
-            self.name = f"{self.__class__.__name__} k = {k}"
+    def __init__(self, k, K, capital=0, interest_rate=0):
+        super().__init__(K=K, capital=capital, interest_rate=interest_rate)
         self.k = k
 
     def get_action(self):
@@ -24,8 +21,9 @@ class AlwaysTheSame(Insurer):
         self.__init__(
             k=self.k,
             K=self.K,
-            name=self.name,
             capital=self.initial_capital,
             interest_rate=self.interest_rate
         )
 
+    def __str__(self):
+        return f"Always k={self.k}"

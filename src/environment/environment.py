@@ -26,13 +26,12 @@ class Environment():
             
         
     def simul_plays(self, N, insurers, a=0.01, b=0.99, filename=datetime.now().strftime("%d_%H:%M:%S")):
-        insurer_name_list = [i.name for i in insurers]
         capital_mean_matrix = []
         capital_low_matrix = []
         capital_high_matrix = []
         ruin_proportion_matrix = []
         for insurer in insurers:
-            print(f"--- Playing with insurer {insurer.name} ---")
+            print(f"--- Playing with insurer {insurer} ---")
             capital_cumul = []
             ruin_time_step_list = []
 
@@ -64,18 +63,18 @@ class Environment():
 
             print("\n")
 
-        self.plot_capital(insurer_name_list, capital_mean_matrix, capital_low_matrix, capital_high_matrix, filename)
-        self.plot_ruin_probability(insurer_name_list, ruin_proportion_matrix, filename)
+        self.plot_capital(insurers, capital_mean_matrix, capital_low_matrix, capital_high_matrix, filename)
+        self.plot_ruin_probability(insurers, ruin_proportion_matrix, filename)
 
     def _compute_var(self, x, alpha):
         idx = int(len(x) * alpha) - 1
         return np.partition(x, idx)[idx]
             
             
-    def plot_capital(self, insurer_name_list, capital_mean_matrix, capital_low_matrix, capital_high_matrix, filename=datetime.now().strftime("%d_%H:%M:%S")):
+    def plot_capital(self, insurers, capital_mean_matrix, capital_low_matrix, capital_high_matrix, filename=datetime.now().strftime("%d_%H:%M:%S")):
         pyplot.clf()
-        for insurer_name, mean, low, high in zip(insurer_name_list, capital_mean_matrix, capital_low_matrix, capital_high_matrix):
-            pyplot.plot(mean, label=insurer_name)
+        for insurer, mean, low, high in zip(insurers, capital_mean_matrix, capital_low_matrix, capital_high_matrix):
+            pyplot.plot(mean, label=insurer)
             pyplot.fill_between(np.arange(len(mean)), low, high, alpha=0.4)
         pyplot.title("Capital de l'assureur en fonction du temps")
         pyplot.xlabel("Pas de temps")
@@ -83,10 +82,10 @@ class Environment():
         pyplot.legend()
         pyplot.savefig(f"outputs/capital_{filename}")
 
-    def plot_ruin_probability(self, insurer_names, ruin_matrix, filename=datetime.now().strftime("%d_%H:%M:%S")):
+    def plot_ruin_probability(self, insurers, ruin_matrix, filename=datetime.now().strftime("%d_%H:%M:%S")):
         pyplot.clf()
-        for insurer_name, ruin in zip(insurer_names, ruin_matrix):
-            pyplot.plot(ruin, label=insurer_name)
+        for insurer, ruin in zip(insurers, ruin_matrix):
+            pyplot.plot(ruin, label=insurer)
         pyplot.title("Proportion des ruines en fonction du temps")
         pyplot.xlabel("Pas de temps")
         pyplot.ylabel("Proportion des ruines (%)")

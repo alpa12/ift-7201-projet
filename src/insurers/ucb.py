@@ -5,7 +5,7 @@ from insurers.insurer import Insurer
 
 class UCB(Insurer):
     def __init__(self, K, name=None, capital=0, interest_rate=0):
-        super().__init__(K=K, name=name, capital=capital, interest_rate=interest_rate)
+        super().__init__(K=K, capital=capital, interest_rate=interest_rate)
         self.t = 0
 
     def get_action(self):
@@ -26,8 +26,9 @@ class UCB(Insurer):
     def reset(self):
         self.__init__(
             K=self.K,
-            name=self.name,
             capital=self.initial_capital,
             interest_rate=self.interest_rate
         )
 
+    def __str__(self):
+        return "UCB"
