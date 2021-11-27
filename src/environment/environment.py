@@ -79,8 +79,9 @@ class Environment():
         pyplot.title("Capital de l'assureur en fonction du temps")
         pyplot.xlabel("Pas de temps")
         pyplot.ylabel("Capital ($)")
-        pyplot.legend()
-        pyplot.savefig(f"outputs/capital_{filename}")
+        lgd = pyplot.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
+                            fancybox=True, shadow=True, ncol=int(np.ceil(len(insurers) / 3)))
+        pyplot.savefig(f"outputs/capital_{filename}", bbox_extra_artists=(lgd,), bbox_inches='tight')
 
     def plot_ruin_probability(self, insurers, ruin_matrix, filename=datetime.now().strftime("%d_%H:%M:%S")):
         pyplot.clf()
@@ -89,5 +90,6 @@ class Environment():
         pyplot.title("Proportion des ruines en fonction du temps")
         pyplot.xlabel("Pas de temps")
         pyplot.ylabel("Proportion des ruines (%)")
-        pyplot.legend()
-        pyplot.savefig(f"outputs/ruin_{filename}")
+        gd = pyplot.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
+                           fancybox=True, shadow=True, ncol=int(np.ceil(len(insurers) / 3)))
+        pyplot.savefig(f"outputs/ruin_{filename}", bbox_extra_artists=(lgd,), bbox_inches='tight')

@@ -27,7 +27,7 @@ epsilon = 0.05
 capital = 500
 
 T = 200
-M = 1000
+M = 10
 
 K = len(prem_list)
 
