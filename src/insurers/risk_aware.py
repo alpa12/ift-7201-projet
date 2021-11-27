@@ -12,10 +12,12 @@ class RiskAware(Insurer):
             self.name = f"{self.__class__.__name__} A = {A}, risk_measure = {risk_measure.__class__.__name__}"
         self.A = A
         self.risk_quantity_list = np.zeros(K)
+        self.parameters = [None] * K
         self.risk_measure = risk_measure
 
 
     def get_action(self):
+
         return np.argmin(self.means - self.A * self.risk_quantity_list)
         
 
@@ -24,7 +26,8 @@ class RiskAware(Insurer):
         self.means[k] = (self.plays[k] * self.means[k] + profit) / (self.plays[k] + 1)
         self.plays[k] += 1
         super().report_results(k, premium, claims)
-        self.risk_quantity_list[k] = self.risk_measure.compute(claims=self.claims[k], capital=self.capital)
+        self.parameters[k] = self.risk_measure.update_parameters(self.parameters[k], self.claims[k])
+        self.risk_quantity_list[k] = self.risk_measure.compute(parameters=self.parameters[k], capital=self.capital)
 
 
     def reset(self):

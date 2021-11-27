@@ -2,7 +2,7 @@ import numpy as np
 from environment import Environment, Insured
 from insurers import ETGreedy, AlwaysTheSame, RiskAware, UCB
 from distributions import Gamma, Constant
-from risk_measures import TVaR
+from risk_measures import TVaR, ProbabilityOfRuin
 
 # 2 insureds
 # mu_1 = mu_2 = 100
@@ -38,7 +38,9 @@ if __name__ == "__main__":
     insurers.append(AlwaysTheSame(k=0, K=K, capital=capital)) # Always chooses the less risky insured
     insurers.append(AlwaysTheSame(k=1, K=K, capital=capital)) # Always chooses the riskier insured
     insurers.append(RiskAware(A=10, K=K, risk_measure=TVaR(kappa=0.95, prior="gamma"), capital=capital))
+    insurers.append(RiskAware(A=0, K=K, risk_measure=TVaR(kappa=0.95, prior="gamma"), capital=capital))
+    insurers.append(RiskAware(A=0, K=K, risk_measure=ProbabilityOfRuin(prior="gamma"), capital=capital))
     insurers.append(UCB(K=K, capital=capital))
     env = Environment(insureds=insureds, T=T)
 
-    env.simul_plays(500, insurers, a = 0.33, b = 0.67, filename=filename)
+    env.simul_plays(5, insurers, a = 0.33, b = 0.67, filename=filename)
