@@ -13,10 +13,10 @@ from risk_measures import VaR, TVaR, PoR
 # Insured #1 (k=0) is a better, less risky choice
 # Will lead to same average profit, but lower probability of ruin
 
-filename = "experiment2"
+filename = "experiment3"
 
 prem_list = [100, 105]
-prior = "gamma"
+prior = None
 mu_list = [100, 100]
 var_list = [1000, 100000]
 
