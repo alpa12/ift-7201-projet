@@ -1,6 +1,6 @@
 import numpy as np
 from environment import Environment, Insured
-from insurers import EGreedy, AlwaysTheSame, RA_UCB
+from insurers import EGreedy, AlwaysTheSame, RiskAware
 from distributions import Gamma, Constant
 
 # 2 insureds
@@ -37,7 +37,7 @@ if __name__ == "__main__":
     insurer1 = EGreedy(epsilon=epsilon, K=K, capital=capital) # Standard EGreedy strategy
     insurer2 = AlwaysTheSame(k=0, K=K, capital=capital) # Always chooses the less risky insured
     insurer3 = AlwaysTheSame(k=1, K=K, capital=capital) # Always chooses the riskier insured
-    insurer4 = RA_UCB(kappa=0.90, K=K, capital=capital)
+    insurer4 = RiskAware(kappa=0.90, K=K, capital=capital)
     env = Environment(insureds=insureds, T=T)
 
     env.simul_plays(100, [insurer1, insurer2, insurer3, insurer4], a = 0.33, b = 0.67, filename=filename)
