@@ -1,6 +1,6 @@
 import numpy as np
 from environment import Environment, Insured
-from insurers import EGreedy, AlwaysTheSame, RA_UCB
+from insurers import ETGreedy, AlwaysTheSame, RiskAware, UCB
 from distributions import Gamma, Constant
 from risk_measures import TVaR
 
@@ -32,10 +32,13 @@ K = len(prem_list)
 if __name__ == "__main__":
     np.random.seed(2021)
     insureds = [Insured(freq=Constant(1), sev=Gamma(alpha, theta), premium=prem) for alpha, theta, prem in zip(alpha_list, theta_list, prem_list)]
-    insurer1 = EGreedy(epsilon=epsilon, K=K, capital=capital) # Standard EGreedy strategy
-    insurer2 = AlwaysTheSame(k=0, K=K, capital=capital) # Always chooses the less risky insured
-    insurer3 = AlwaysTheSame(k=1, K=K, capital=capital) # Always chooses the riskier insured
-    insurer4 = RA_UCB(risk_aversion=10, K=K, risk_measure=TVaR(kappa=0.95, prior="gamma"), capital=capital)
+
+    insurers = []
+    insurers.append(ETGreedy(K=K, capital=capital)) # ETGreedy strategy with epsilon = 1 / sqrt(t)
+    insurers.append(AlwaysTheSame(k=0, K=K, capital=capital)) # Always chooses the less risky insured
+    insurers.append(AlwaysTheSame(k=1, K=K, capital=capital)) # Always chooses the riskier insured
+    insurers.append(RiskAware(A=10, K=K, risk_measure=TVaR(kappa=0.95, prior="gamma"), capital=capital))
+    insurers.append(UCB(K=K, capital=capital))
     env = Environment(insureds=insureds, T=T)
 
-    env.simul_plays(500, [insurer1, insurer2, insurer3, insurer4], a = 0.33, b = 0.67, filename=filename)
+    env.simul_plays(500, insurers, a = 0.33, b = 0.67, filename=filename)
