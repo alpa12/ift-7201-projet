@@ -1,20 +1,81 @@
 import numpy as np
+import bisect
 from scipy.stats import poisson, gamma
+from welford import Welford
 
 
 class RiskMeasure:
     def __init__(self, prior=None):
         self.prior = prior
 
-    def compute(self, claims, capital=0):
+    def compute(self, parameters, capital=0):
         if self.prior is None:
-            return self.compute_no_prior(claims, capital)
+            sorted_claims = parameters
+            return self.compute_no_prior(sorted_claims, capital)
         elif self.prior == "poisson":
-            return self.compute_poisson(claims, capital)
+            _lambda, _ = parameters
+            return self.compute_poisson(_lambda, capital)
         elif self.prior == "gamma":
-            return self.compute_gamma(claims, capital)
+            alpha, theta, _ = parameters
+            return self.compute_gamma(alpha, theta, capital)
         elif self.prior == "poisson-gamma":
-            return self.compute_poisson_gamma(claims, capital)
+            poisson_parameters, gamma_parameters = parameters
+            _lambda, _ = poisson_parameters
+            alpha, theta, _ = gamma_parameters
+            return self.compute_poisson_gamma(_lambda, alpha, theta, capital)
+
+    def update_parameters(self, claims, old_parameters=None):
+        if self.prior is None:
+            updated_parameters = self.estimate_no_prior_parameters(claims, old_parameters)
+        elif self.prior == "poisson":
+            updated_parameters = self.estimate_poisson_parameters(claims, old_parameters)
+        elif self.prior == "gamma":
+            updated_parameters = self.estimate_gamma_parameters(claims, old_parameters)
+        elif self.prior == "poisson-gamma":
+            old_poisson_parameters, old_gamma_parameters = old_parameters
+            updated_poisson_parameters = self.estimate_poisson_parameters(claims, old_poisson_parameters)
+            updated_gamma_parameters = self.estimate_poisson_parameters(claims, old_gamma_parameters)
+            updated_parameters = (updated_poisson_parameters, updated_gamma_parameters)
+        return updated_parameters
+
+    def estimate_no_prior_parameters(self, claims, old_parameters=None):
+        if old_parameters is None:
+            totals = [np.sum(c) for c in claims]
+            totals.sort()
+        else:
+            sorted_claims = old_parameters
+            new_claim = np.sum(claims[-1])
+            bisect.insort(sorted_claims, new_claim)
+            parameters = sorted_claims
+        return parameters
+
+    def estimate_poisson_parameters(self, claims, old_parameters=None):
+        if old_parameters is None:
+            n_claims = [len(c) for c in claims]
+            _lambda = np.mean(n_claims)
+            n_obs = len(claims)
+        else:
+            old_lambda, old_n_obs = old_parameters
+            n_obs = old_n_obs + 1
+            new_n_claims = np.sum(claims[-1])
+            _lambda = (old_lambda * old_n_obs + new_n_claims) / n_obs
+        return _lambda, n_obs
+
+    def estimate_gamma_parameters(self, claims, old_parameters=None):
+        # Algorithme Welford pour calcul en ligne de la variance
+        if old_parameters is None:
+            w = Welford()
+            severities = [c for claim_list in claims for c in claim_list]
+        else:
+            _, _, w = old_parameters
+            severities = claims[-1]
+
+        for severity in severities:
+            w.add(np.array([severity]))
+
+        theta = w.var_s[0] / w.mean[0]
+        alpha = w.mean[0] / theta
+        return alpha, theta, w
 
     def compute_no_prior(self, claims):
         pass
@@ -27,26 +88,3 @@ class RiskMeasure:
 
     def compute_poisson_gamma(self, claims):
         pass
-
-    def estimate_poisson_parameters(self, claims):
-        n_claims = [len(c) for c in claims]
-        _lambda = np.mean(n_claims)
-        return _lambda
-
-    def estimate_gamma_parameters(self, claims):
-        severities = [c for claim_list in claims for c in claim_list]
-        avg_severity = np.mean(severities)
-        variance_severity = np.var(severities)
-        theta = variance_severity / avg_severity
-        alpha = avg_severity / theta
-        return alpha, theta
-
-    def estimate_avg_frequency(self, claims):
-        n_claims = [len(c) for c in claims]
-        frequency = np.mean(n_claims)
-        return frequency
-
-    def estimate_avg_severity(self, claims):
-        severities = [c for claim_list in claims for c in claim_list]
-        avg_severity = np.mean(severities)
-        return avg_severity
