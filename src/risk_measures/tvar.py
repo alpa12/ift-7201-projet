@@ -51,4 +51,4 @@ class TVaR(RiskMeasure):
         return tvar
 
     def __str__(self):
-        return "TVaR"
+        return f"TVaR{self.kappa}"

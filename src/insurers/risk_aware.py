@@ -9,17 +9,16 @@ class RiskAware(Insurer):
         super().__init__(K=K, name=name, capital=capital, interest_rate=interest_rate)
         if name is None:
             # Overwrite name to add A parameter
-            self.name = f"{self.__class__.__name__} A = {A}, risk_measure = {risk_measure.__class__.__name__}"
+            self.name = f"{self.__class__.__name__}{A} {risk_measure}"
         self.A = A
         self.risk_quantity_list = np.zeros(K)
         self.parameters = [None] * K
         self.risk_measure = risk_measure
 
-
     def get_action(self):
-
-        return np.argmin(self.means - self.A * self.risk_quantity_list)
-        
+        utility = self.means - self.A * self.risk_quantity_list
+        best_actions = np.argwhere(utility == np.amax(utility)).flatten()
+        return np.random.choice(best_actions)
 
     def report_results(self, k, premium, claims):
         profit = premium - np.sum(claims)
@@ -28,7 +27,6 @@ class RiskAware(Insurer):
         super().report_results(k, premium, claims)
         self.parameters[k] = self.risk_measure.update_parameters(self.claims[k], self.parameters[k])
         self.risk_quantity_list[k] = self.risk_measure.compute(parameters=self.parameters[k], capital=self.capital)
-
 
     def reset(self):
         self.__init__(
@@ -39,4 +37,3 @@ class RiskAware(Insurer):
             capital=self.initial_capital,
             interest_rate=self.interest_rate
         )
-

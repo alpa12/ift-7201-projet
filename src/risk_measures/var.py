@@ -40,4 +40,4 @@ class VaR(RiskMeasure):
         # return var * (1 + TOL)
 
     def __str__(self):
-        return "VaR"
+        return f"VaR{self.kappa}"

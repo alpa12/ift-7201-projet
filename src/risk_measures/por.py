@@ -4,7 +4,7 @@ from scipy.stats import poisson, gamma
 from risk_measures.risk_measure import RiskMeasure
 
 
-class ProbabilityOfRuin(RiskMeasure):
+class PoR(RiskMeasure):
     def compute_no_prior(self, sorted_claims, capital):
         if sorted_claims[-1] < capital:
             prob = 0
@@ -36,4 +36,4 @@ class ProbabilityOfRuin(RiskMeasure):
         return prob + tol
 
     def __str__(self):
-        return "Probability of Ruin"
+        return "PoR"
