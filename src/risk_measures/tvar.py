@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.stats import poisson, gamma
-from risk_measure import RiskMeasure
+from risk_measures.risk_measure import RiskMeasure
 
 
 class TVaR(RiskMeasure):
