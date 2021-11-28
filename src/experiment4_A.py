@@ -23,7 +23,6 @@ var_list = [1000, 100000]
 theta_list = [var/mu for mu, var in zip(mu_list, var_list)]
 alpha_list = [mu/theta for theta, mu in zip(theta_list, mu_list)]
 
-epsilon = 0.05
 capital = 500
 
 T = 200

@@ -17,18 +17,17 @@ filename = "experiment6_poisson_gamma"
 
 prem_list = [100, 105]
 prior = "poisson-gamma"
-mu_list = [50, 100]
+mu_list = [100, 200]
 var_list = [1000, 100000]
 
-lambda_list = [2, 1]
+lambda_list = [1, 0.5]
 theta_list = [var/mu for mu, var in zip(mu_list, var_list)]
 alpha_list = [mu/theta for theta, mu in zip(theta_list, mu_list)]
 
-epsilon = 0.05
 capital = 500
 
 T = 200
-M = 1000
+M = 10000
 
 K = len(prem_list)
 
