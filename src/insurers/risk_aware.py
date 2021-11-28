@@ -23,7 +23,7 @@ class RiskAware(Insurer):
         self.plays[k] += 1
         super().report_results(k, premium, claims)
         self.parameters[k] = self.risk_measure.update_parameters(self.claims[k], self.parameters[k])
-        self.risk_quantity_list[k] = self.risk_measure.compute(parameters=self.parameters[k], capital=self.capital)
+        self.risk_quantity_list[k] = self.risk_measure.compute(parameters=self.parameters[k], capital=self.capital + premium)
 
     def reset(self):
         super().reset()

@@ -9,6 +9,8 @@ class RiskMeasure:
         self.prior = prior
 
     def compute(self, parameters, capital=0):
+        if parameters is None:
+            return 0
         if self.prior is None:
             sorted_claims = parameters
             return self.compute_no_prior(sorted_claims, capital)
@@ -19,6 +21,8 @@ class RiskMeasure:
             alpha, theta, _ = parameters
             return self.compute_gamma(alpha, theta, capital)
         elif self.prior == "poisson-gamma":
+            if None in parameters:
+                return 0
             poisson_parameters, gamma_parameters = parameters
             _lambda, _ = poisson_parameters
             alpha, theta, _ = gamma_parameters
@@ -32,9 +36,9 @@ class RiskMeasure:
         elif self.prior == "gamma":
             updated_parameters = self.estimate_gamma_parameters(claims, old_parameters)
         elif self.prior == "poisson-gamma":
-            old_poisson_parameters, old_gamma_parameters = old_parameters
+            old_poisson_parameters, old_gamma_parameters = (None, None) if old_parameters is None else old_parameters
             updated_poisson_parameters = self.estimate_poisson_parameters(claims, old_poisson_parameters)
-            updated_gamma_parameters = self.estimate_poisson_parameters(claims, old_gamma_parameters)
+            updated_gamma_parameters = self.estimate_gamma_parameters(claims, old_gamma_parameters)
             updated_parameters = (updated_poisson_parameters, updated_gamma_parameters)
         return updated_parameters
 
@@ -58,8 +62,10 @@ class RiskMeasure:
         else:
             old_lambda, old_n_obs = old_parameters
             n_obs = old_n_obs + 1
-            new_n_claims = np.sum(claims[-1])
+            new_n_claims = len(claims[-1])
             _lambda = (old_lambda * old_n_obs + new_n_claims) / n_obs
+        if _lambda == 0:
+            return None
         return _lambda, n_obs
 
     def estimate_gamma_parameters(self, claims, old_parameters=None):
@@ -70,10 +76,10 @@ class RiskMeasure:
         else:
             _, _, w = old_parameters
             severities = claims[-1]
-
         for severity in severities:
             w.add(np.array([severity]))
-
+        if w.mean is None:
+            return None
         variance = w.mean[0] if np.isnan(w.var_s[0]) else w.var_s[0]
         theta = variance / w.mean[0]
         alpha = w.mean[0] / theta
