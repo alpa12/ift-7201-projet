@@ -13,7 +13,8 @@ class ETGreedy(Insurer):
         if np.random.rand() < epsilon:
             return np.random.choice(self.K)
         else:
-            return np.argmax(self.means)
+            best_actions = np.argwhere(self.means == np.amax(self.means)).flatten()
+            return np.random.choice(best_actions)
 
     def report_results(self, k, premium, claims):
         profit = premium - np.sum(claims)
