@@ -12,10 +12,10 @@ prior = None
 
 
 capital = 500
-interest_rate = 0.01
+interest_rate = 0.00
 
 T = 500
-M = 500
+M = 10000
 
 
 if __name__ == "__main__":
@@ -26,7 +26,7 @@ if __name__ == "__main__":
     insurers.append(Insurer(K=K, capital=capital, interest_rate=interest_rate)) # Chooses insured randomly
     insurers.append(RiskAware(A=100, K=K, risk_measure=VaR(kappa=0.95, prior=prior), capital=capital, interest_rate=interest_rate))
     insurers.append(RiskAware(A=100, K=K, risk_measure=TVaR(kappa=0.95, prior=prior), capital=capital, interest_rate=interest_rate))
-    insurers.append(RiskAware(A=10000, K=K, risk_measure=PoR(prior=prior), capital=capital, interest_rate=interest_rate))
+    insurers.append(RiskAware(A=100000, K=K, risk_measure=PoR(prior=prior), capital=capital, interest_rate=interest_rate))
     insurers.append(UCB(K=K, capital=capital, interest_rate=interest_rate))
     env = Wild(K=K, T=T)
 
