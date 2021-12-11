@@ -23,7 +23,6 @@ var_list = [1000, 100000]
 theta_list = [var/mu for mu, var in zip(mu_list, var_list)]
 alpha_list = [mu/theta for theta, mu in zip(theta_list, mu_list)]
 
-epsilon = 0.05
 capital = 500
 
 T = 200
@@ -37,13 +36,13 @@ if __name__ == "__main__":
 
     insurers = []
     insurers.append(ETGreedy(K=K, capital=capital)) # ETGreedy strategy with epsilon = 1 / sqrt(t)
-    # insurers.append(AlwaysTheSame(k=0, K=K, capital=capital)) # Always chooses the less risky insured
-    # insurers.append(AlwaysTheSame(k=1, K=K, capital=capital)) # Always chooses the riskier insured
-    # insurers.append(Insurer(K=K, capital=capital)) # Chooses insured randomly
-    # insurers.append(RiskAware(A=1, K=K, risk_measure=VaR(kappa=0.95, prior=prior), capital=capital))
+    insurers.append(AlwaysTheSame(k=0, K=K, capital=capital)) # Always chooses the less risky insured
+    insurers.append(AlwaysTheSame(k=1, K=K, capital=capital)) # Always chooses the riskier insured
+    insurers.append(Insurer(K=K, capital=capital)) # Chooses insured randomly
+    insurers.append(RiskAware(A=1, K=K, risk_measure=VaR(kappa=0.95, prior=prior), capital=capital))
     insurers.append(RiskAware(A=1, K=K, risk_measure=TVaR(kappa=0.95, prior=prior), capital=capital))
-    # insurers.append(RiskAware(A=100, K=K, risk_measure=PoR(prior=prior), capital=capital))
-    # insurers.append(UCB(K=K, capital=capital))
+    insurers.append(RiskAware(A=100, K=K, risk_measure=PoR(prior=prior), capital=capital))
+    insurers.append(UCB(K=K, capital=capital))
     env = Environment(insureds=insureds, T=T)
 
     env.simul_plays(M, insurers, a = 0.05, b = 0.95, filename=filename)

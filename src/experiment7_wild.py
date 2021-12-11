@@ -4,7 +4,7 @@ from insurers import ETGreedy, RiskAware, UCB, Insurer
 from risk_measures import VaR, TVaR, PoR
 
 
-filename = "experiment7_multiple_insureds"
+filename = "experiment7_wild"
 
 K = 50
 

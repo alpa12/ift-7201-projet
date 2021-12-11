@@ -13,7 +13,7 @@ from risk_measures import VaR, TVaR, PoR
 # Insured #1 (k=0) is a better, less risky choice
 # Will lead to same average profit, but lower probability of ruin
 
-filename = "experiment2_diff_premiums_2insurers"
+filename = "experiment2_diff_premium_two_insurers"
 
 prem_list = [100, 105]
 prior = "gamma"
